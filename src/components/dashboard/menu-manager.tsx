@@ -66,7 +66,7 @@ function SideDrawer({ open, onClose, title, children }: DrawerProps) {
         }`}
       >
         <div className="flex items-center justify-between border-b border-stone-800 px-4 py-3">
-          <h2 className="font-serif text-lg font-medium text-stone-100">{title}</h2>
+          <h2 className="text-lg font-medium text-stone-100">{title}</h2>
           <button
             type="button"
             onClick={onClose}

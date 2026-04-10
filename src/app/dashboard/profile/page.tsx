@@ -16,7 +16,7 @@ export default async function ProfilePage() {
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div>
-        <h1 className="font-serif text-2xl font-semibold tracking-tight text-stone-50 sm:text-3xl">
+        <h1 className="text-2xl font-semibold tracking-tight text-stone-50 sm:text-3xl">
           Profile
         </h1>
         <p className="mt-1 text-sm text-stone-500">
@@ -25,6 +25,7 @@ export default async function ProfilePage() {
       </div>
 
       <RestaurantBrandingForm
+        initialName={restaurant.name}
         initialLogoUrl={restaurant.logoUrl}
         initialInstagramUrl={restaurant.instagramUrl}
         initialTiktokUrl={restaurant.tiktokUrl}

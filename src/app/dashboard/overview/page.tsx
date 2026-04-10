@@ -3,6 +3,8 @@ import { menuPublicUrl } from "@/lib/public-url";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { VisitorAnalyticsCards } from "@/components/dashboard/visitor-analytics-cards";
+import { getVisitChartSeries } from "@/lib/analytics";
 
 export default async function OverviewPage() {
   const session = await auth();
@@ -18,11 +20,12 @@ export default async function OverviewPage() {
   if (!restaurant) redirect("/dashboard");
 
   const publicUrl = menuPublicUrl(restaurant.slug);
+  const visitSeries = await getVisitChartSeries(restaurant.id);
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
+    <div className="mx-auto max-w-5xl space-y-8">
       <div>
-        <h1 className="font-serif text-2xl font-semibold tracking-tight text-stone-50 sm:text-3xl">
+        <h1 className="text-2xl font-semibold tracking-tight text-stone-50 sm:text-3xl">
           Overview
         </h1>
         <p className="mt-1 text-sm text-stone-500">Quick snapshot of your QR menu.</p>
@@ -31,7 +34,7 @@ export default async function OverviewPage() {
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="rounded-xl border border-stone-700/90 bg-stone-900/60 p-5 shadow-lg shadow-black/20">
           <p className="text-xs font-medium uppercase tracking-wider text-stone-500">Menu items</p>
-          <p className="mt-2 font-serif text-3xl font-semibold text-amber-400">
+          <p className="mt-2 text-3xl font-semibold text-amber-400">
             {restaurant._count.menuItems}
           </p>
         </div>
@@ -49,6 +52,8 @@ export default async function OverviewPage() {
           </p>
         </div>
       </div>
+
+      <VisitorAnalyticsCards series={visitSeries} />
 
       <div className="rounded-xl border border-stone-700/90 bg-stone-900/40 p-5">
         <h2 className="text-sm font-medium text-stone-300">Next steps</h2>

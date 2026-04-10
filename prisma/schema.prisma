@@ -28,10 +28,36 @@ model Restaurant {
   userId       String
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   menuItems   MenuItem[]
+  analyticsVisits AnalyticsVisit[]
+  analyticsPresences AnalyticsPresence[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
   @@index([userId])
+}
+
+/// Anonymous visitors to the public menu (per-browser id in cookie/localStorage).
+model AnalyticsVisit {
+  id            String     @id @default(cuid())
+  restaurantId  String
+  restaurant    Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  visitorId     String
+  visitedAt     DateTime   @default(now())
+
+  @@index([restaurantId, visitedAt])
+  @@index([restaurantId, visitorId])
+}
+
+/// Current public-menu viewers; updated by view/heartbeat, removed on leave.
+model AnalyticsPresence {
+  id             String     @id @default(cuid())
+  restaurantId  String
+  restaurant     Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  visitorId      String
+  lastSeenAt     DateTime   @default(now())
+
+  @@unique([restaurantId, visitorId])
+  @@index([restaurantId, lastSeenAt])
 }
 
 model MenuItem {
