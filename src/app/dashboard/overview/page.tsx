@@ -75,9 +75,9 @@ export default async function OverviewPage() {
           <li>
             Point your QR code to{" "}
             <code className="rounded border border-stone-700 bg-stone-950 px-1.5 py-0.5 text-stone-300">
-              {restaurant.slug}.localhost:3000
-            </code>{" "}
-            (local) or your production subdomain.
+              {publicUrl}
+            </code>
+            .
           </li>
         </ul>
       </div>

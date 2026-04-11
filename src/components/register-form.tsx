@@ -3,9 +3,11 @@
 import { useActionState } from "react";
 import Link from "next/link";
 import { registerAction } from "@/actions/register";
+import { formatGuestMenuUrlExample, menuPublicDomainSuffix, ownerDashboardUrlHint } from "@/lib/public-url";
 
 export function RegisterForm() {
   const [state, action, pending] = useActionState(registerAction, null);
+  const ownerAppUrl = ownerDashboardUrlHint();
 
   return (
     <form action={action} className="mx-auto max-w-md space-y-4 rounded-2xl border border-amber-200/80 bg-white p-8 shadow-sm">
@@ -63,12 +65,25 @@ export function RegisterForm() {
             className="min-w-0 flex-1 rounded-l-lg bg-white px-3 py-2 outline-none"
             placeholder="corner-bistro"
           />
-          <span className="flex items-center pr-3 text-zinc-400">
-            .{process.env.NEXT_PUBLIC_ROOT_DOMAIN || "app.ca"}
-          </span>
+          <span className="flex items-center pr-3 text-zinc-400">{menuPublicDomainSuffix()}</span>
         </div>
-        <span className="mt-1 block text-xs text-zinc-400">
-          Local dev: use <code className="rounded bg-zinc-100 px-1">yourslug.localhost:3000</code>
+        <span className="mt-1 block space-y-1 text-xs text-zinc-400">
+          <span className="block">
+            Guests open your menu at{" "}
+            <code className="rounded bg-zinc-100 px-1">
+              {formatGuestMenuUrlExample("yourslug") || "— set AUTH_URL and NEXT_PUBLIC_ROOT_DOMAIN"}
+            </code>
+            {ownerAppUrl ? (
+              <>
+                {" "}
+                · manage the app at{" "}
+                <code className="rounded bg-zinc-100 px-1">{ownerAppUrl}</code>
+              </>
+            ) : null}
+          </span>
+          <span className="block">
+            Local dev: <code className="rounded bg-zinc-100 px-1">yourslug.localhost:3000</code>
+          </span>
         </span>
       </label>
       <button
