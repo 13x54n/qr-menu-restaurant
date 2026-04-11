@@ -2,7 +2,6 @@
 
 import { useActionState } from "react";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { loginAction } from "@/actions/login";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -63,10 +62,9 @@ export function LoginForm() {
             {pending ? "Signing in…" : "Sign in"}
           </Button>
           <p className="text-center text-sm text-muted-foreground">
-            New here?{" "}
-            <Button variant="link" className="h-auto p-0 text-primary" render={<Link href="/register" />}>
-              Register your restaurant
-            </Button>
+            New accounts are not created on the web. Use the local{" "}
+            <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">db:create-owner</code> script — see{" "}
+            <span className="font-medium text-foreground">README.md</span>.
           </p>
         </CardContent>
       </form>

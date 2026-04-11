@@ -27,14 +27,16 @@ export default async function ProfilePage() {
         </p>
       </div>
 
-      <AccountSettingsForm initialEmail={initialEmail} />
-
       <RestaurantBrandingForm
         initialName={restaurant.name}
         initialLogoUrl={restaurant.logoUrl}
         initialInstagramUrl={restaurant.instagramUrl}
         initialTiktokUrl={restaurant.tiktokUrl}
       />
+
+      <AccountSettingsForm initialEmail={initialEmail} />
+
+
     </div>
   );
 }

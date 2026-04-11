@@ -16,11 +16,8 @@ export default function Home() {
             QR Menu
           </Button>
           <nav className="flex flex-wrap items-center gap-2 sm:justify-end sm:gap-2">
-            <Button variant="ghost" size="sm" render={<Link href="/login" />}>
-              Sign in
-            </Button>
-            <Button size="sm" className="rounded-full px-4" render={<Link href="/register" />}>
-              Get started
+            <Button size="sm" className="rounded-full px-4" render={<Link href="/login" />}>
+              Owner login
             </Button>
           </nav>
         </div>
@@ -31,7 +28,7 @@ export default function Home() {
           Your menu on its own subdomain
         </h1>
         <p className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
-          Register your restaurant, build your menu, and share a clean link
+          Build your menu and share a clean link
           {exampleMenu ? (
             <>
               {" "}
@@ -39,18 +36,10 @@ export default function Home() {
               <span className="whitespace-nowrap font-medium text-primary">{exampleMenu}</span>
             </>
           ) : null}{" "}
-          — perfect for QR codes on tables.
+          — perfect for QR codes on tables. Restaurant owners sign in to manage menus and branding.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <Button size="lg" className="rounded-full px-8" render={<Link href="/register" />}>
-            Register restaurant
-          </Button>
-          <Button
-            variant="outline"
-            size="lg"
-            className="rounded-full px-8"
-            render={<Link href="/login" />}
-          >
+          <Button size="lg" className="rounded-full px-8" render={<Link href="/login" />}>
             Owner login
           </Button>
         </div>

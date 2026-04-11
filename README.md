@@ -1,38 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# QR Menu (restaurant)
 
-## Getting Started
+Next.js app for multi-tenant restaurant menus (dashboard + public menu by subdomain).
 
-First, run the development server:
+## Requirements
+
+- Node.js 20+
+- PostgreSQL and a `DATABASE_URL` in `.env` (see Prisma)
+
+## Setup
 
 ```bash
+npm install
+npx prisma db push
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). Public web **registration is disabled**; owners are created locally (below).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Creating an owner (local / private)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+There is **no** `/register` page. To add a user and their restaurant (same validation as the old register form):
 
-## Learn More
+1. Ensure `DATABASE_URL` is set (e.g. from `.env` in your shell — however you normally run Prisma/Next).
+2. From the repo root:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run db:create-owner -- \
+  --email you@example.com \
+  --password 'your-secure-password' \
+  --name "Owner display name" \
+  --restaurant "Restaurant name" \
+  --slug your-subdomain
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Rules**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Password:** at least 8 characters.
+- **Slug:** lowercase letters, numbers, and single hyphens only (e.g. `corner-bistro`). Must be unique in the database.
+- **Email:** must be unique.
 
-## Deploy on Vercel
+Then sign in at `/login` with that email and password.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Other scripts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Seed sample menu (fixed restaurant id):** `npm run db:seed:laligurans` — see `scripts/seed-laligurans-menu.ts`.
 
-**Edge middleware size:** `src/middleware.ts` uses `getToken` from `next-auth/jwt` instead of importing `auth` from `@/auth`, so the Edge bundle stays under Vercel’s limit (importing the full NextAuth config pulls Prisma/providers and can exceed 1 MB).
+## Development notes
+
+- **Edge middleware:** `src/middleware.ts` uses `getToken` from `next-auth/jwt` instead of importing the full `auth()` config, to keep the Edge bundle small (Vercel limit).
+- **Agents / Next.js:** see [AGENTS.md](AGENTS.md) for framework notes.
