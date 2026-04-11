@@ -4,104 +4,125 @@ import { useActionState } from "react";
 import Link from "next/link";
 import { registerAction } from "@/actions/register";
 import { formatGuestMenuUrlExample, menuPublicDomainSuffix, ownerDashboardUrlHint } from "@/lib/public-url";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function RegisterForm() {
   const [state, action, pending] = useActionState(registerAction, null);
   const ownerAppUrl = ownerDashboardUrlHint();
 
   return (
-    <form
-      action={action}
-      className="mx-auto w-full max-w-md space-y-4 rounded-2xl border border-amber-200/80 bg-white p-4 shadow-sm sm:p-8"
-    >
-      <h1 className="font-serif text-2xl font-semibold text-zinc-900">Create your restaurant</h1>
-      {state && "ok" in state && !state.ok ? (
-        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>
-      ) : null}
-      <label className="block">
-        <span className="text-xs font-medium text-zinc-500">Your name</span>
-        <input
-          name="name"
-          required
-          autoComplete="name"
-          className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
-        />
-      </label>
-      <label className="block">
-        <span className="text-xs font-medium text-zinc-500">Email</span>
-        <input
-          name="email"
-          type="email"
-          required
-          autoComplete="email"
-          className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
-        />
-      </label>
-      <label className="block">
-        <span className="text-xs font-medium text-zinc-500">Password (min 8 characters)</span>
-        <input
-          name="password"
-          type="password"
-          required
-          minLength={8}
-          autoComplete="new-password"
-          className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
-        />
-      </label>
-      <label className="block">
-        <span className="text-xs font-medium text-zinc-500">Restaurant name</span>
-        <input
-          name="restaurantName"
-          required
-          className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
-          placeholder="The Corner Bistro"
-        />
-      </label>
-      <label className="block">
-        <span className="text-xs font-medium text-zinc-500">Subdomain (your public URL)</span>
-        <div className="mt-1 flex rounded-lg border border-zinc-200 bg-zinc-50 text-sm">
-          <input
-            name="slug"
-            required
-            pattern="[a-z0-9]+(-[a-z0-9]+)*"
-            title="Lowercase letters, numbers, and hyphens only"
-            className="min-w-0 flex-1 rounded-l-lg bg-white px-3 py-2 outline-none"
-            placeholder="corner-bistro"
-          />
-          <span className="flex items-center pr-3 text-zinc-400">{menuPublicDomainSuffix()}</span>
-        </div>
-        <span className="mt-1 block space-y-1 text-xs text-zinc-400">
-          <span className="block">
-            Guests open your menu at{" "}
-            <code className="rounded bg-zinc-100 px-1">
-              {formatGuestMenuUrlExample("yourslug") || "— set AUTH_URL and NEXT_PUBLIC_ROOT_DOMAIN"}
-            </code>
-            {ownerAppUrl ? (
-              <>
-                {" "}
-                · manage the app at{" "}
-                <code className="rounded bg-zinc-100 px-1">{ownerAppUrl}</code>
-              </>
-            ) : null}
-          </span>
-          <span className="block">
-            Local dev: <code className="rounded bg-zinc-100 px-1">yourslug.localhost:3000</code>
-          </span>
-        </span>
-      </label>
-      <button
-        type="submit"
-        disabled={pending}
-        className="w-full rounded-lg bg-amber-700 py-2.5 text-sm font-medium text-white hover:bg-amber-800 disabled:opacity-60"
-      >
-        {pending ? "Creating…" : "Register"}
-      </button>
-      <p className="text-center text-sm text-zinc-500">
-        Already have an account?{" "}
-        <Link href="/login" className="font-medium text-amber-800 hover:underline">
-          Sign in
-        </Link>
-      </p>
-    </form>
+    <Card className="mx-auto w-full max-w-md border-border shadow-lg">
+      <form action={action} className="flex flex-col gap-4">
+        <CardHeader className="pb-0">
+          <CardTitle className="text-2xl">Create your restaurant</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 pt-0">
+          {state && "ok" in state && !state.ok ? (
+            <p className="rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+              {state.error}
+            </p>
+          ) : null}
+          <div className="space-y-2">
+            <Label htmlFor="reg-name" className="text-xs text-muted-foreground">
+              Your name
+            </Label>
+            <Input id="reg-name" name="name" required autoComplete="name" className="h-10" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="reg-email" className="text-xs text-muted-foreground">
+              Email
+            </Label>
+            <Input
+              id="reg-email"
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              className="h-10"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="reg-password" className="text-xs text-muted-foreground">
+              Password (min 8 characters)
+            </Label>
+            <Input
+              id="reg-password"
+              name="password"
+              type="password"
+              required
+              minLength={8}
+              autoComplete="new-password"
+              className="h-10"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="reg-restaurant" className="text-xs text-muted-foreground">
+              Restaurant name
+            </Label>
+            <Input
+              id="reg-restaurant"
+              name="restaurantName"
+              required
+              className="h-10"
+              placeholder="The Corner Bistro"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="reg-slug" className="text-xs text-muted-foreground">
+              Subdomain (your public URL)
+            </Label>
+            <div className="flex overflow-hidden rounded-lg border border-input bg-muted/40 text-sm shadow-sm focus-within:ring-2 focus-within:ring-ring/50">
+              <Input
+                id="reg-slug"
+                name="slug"
+                required
+                pattern="[a-z0-9]+(-[a-z0-9]+)*"
+                title="Lowercase letters, numbers, and hyphens only"
+                className="h-10 flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0"
+                placeholder="corner-bistro"
+              />
+              <span className="flex shrink-0 items-center border-l border-border bg-muted/60 px-3 text-xs text-muted-foreground">
+                {menuPublicDomainSuffix()}
+              </span>
+            </div>
+            <span className="mt-1 block space-y-1 text-xs text-muted-foreground">
+              <span className="block">
+                Guests open your menu at{" "}
+                <code className="rounded bg-muted px-1 py-0.5 font-mono text-[0.7rem] text-foreground">
+                  {formatGuestMenuUrlExample("yourslug") || "— set AUTH_URL and NEXT_PUBLIC_ROOT_DOMAIN"}
+                </code>
+                {ownerAppUrl ? (
+                  <>
+                    {" "}
+                    · manage the app at{" "}
+                    <code className="rounded bg-muted px-1 py-0.5 font-mono text-[0.7rem] text-foreground">
+                      {ownerAppUrl}
+                    </code>
+                  </>
+                ) : null}
+              </span>
+              <span className="block">
+                Local dev:{" "}
+                <code className="rounded bg-muted px-1 py-0.5 font-mono text-[0.7rem] text-foreground">
+                  yourslug.localhost:3000
+                </code>
+              </span>
+            </span>
+          </div>
+          <Button type="submit" disabled={pending} className="h-10 w-full">
+            {pending ? "Creating…" : "Register"}
+          </Button>
+          <p className="text-center text-sm text-muted-foreground">
+            Already have an account?{" "}
+            <Button variant="link" className="h-auto p-0 text-primary" render={<Link href="/login" />}>
+              Sign in
+            </Button>
+          </p>
+        </CardContent>
+      </form>
+    </Card>
   );
 }

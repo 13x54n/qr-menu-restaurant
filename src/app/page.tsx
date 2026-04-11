@@ -1,55 +1,58 @@
 import Link from "next/link";
 import { formatGuestMenuUrlExample } from "@/lib/public-url";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const exampleMenu = formatGuestMenuUrlExample("corner-bistro");
   return (
-    <div className="flex flex-1 flex-col bg-gradient-to-b from-amber-50 via-orange-50 to-amber-100">
-      <header className="border-b border-amber-200/60 bg-white/80 px-4 py-3 backdrop-blur sm:px-6 sm:py-4">
-        <div className="mx-auto flex max-w-5xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <span className="font-serif text-lg font-semibold text-amber-950">QR Menu</span>
-          <nav className="flex flex-wrap items-center gap-3 text-sm sm:justify-end sm:gap-4">
-            <Link href="/login" className="text-zinc-600 hover:text-zinc-900">
+    <div className="flex min-h-dvh flex-1 flex-col bg-gradient-to-b from-background via-muted/25 to-background">
+      <header className="sticky top-0 z-50 border-b border-border/80 bg-card/75 backdrop-blur-md supports-[backdrop-filter]:bg-card/60">
+        <div className="mx-auto flex max-w-5xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-4">
+          <Button
+            variant="ghost"
+            className="h-auto justify-start p-0 text-lg font-semibold tracking-tight hover:bg-transparent"
+            render={<Link href="/" />}
+          >
+            QR Menu
+          </Button>
+          <nav className="flex flex-wrap items-center gap-2 sm:justify-end sm:gap-2">
+            <Button variant="ghost" size="sm" render={<Link href="/login" />}>
               Sign in
-            </Link>
-            <Link
-              href="/register"
-              className="rounded-full bg-amber-700 px-4 py-2 font-medium text-white hover:bg-amber-800"
-            >
+            </Button>
+            <Button size="sm" className="rounded-full px-4" render={<Link href="/register" />}>
               Get started
-            </Link>
+            </Button>
           </nav>
         </div>
       </header>
 
-      <main className="mx-auto flex max-w-3xl flex-1 flex-col items-center justify-center px-4 py-16 text-center sm:px-6 sm:py-24">
-        <h1 className="font-serif text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl md:text-5xl">
+      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center px-4 py-16 text-center sm:px-6 sm:py-24">
+        <h1 className="text-balance font-heading text-3xl font-semibold tracking-tight text-foreground sm:text-4xl md:text-5xl">
           Your menu on its own subdomain
         </h1>
-        <p className="mt-6 text-base leading-relaxed text-zinc-600 sm:text-lg">
+        <p className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
           Register your restaurant, build your menu, and share a clean link
           {exampleMenu ? (
             <>
               {" "}
               like{" "}
-              <span className="whitespace-nowrap font-medium text-amber-900">{exampleMenu}</span>
+              <span className="whitespace-nowrap font-medium text-primary">{exampleMenu}</span>
             </>
           ) : null}{" "}
           — perfect for QR codes on tables.
         </p>
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <Link
-            href="/register"
-            className="rounded-full bg-amber-700 px-8 py-3 text-base font-medium text-white shadow-sm hover:bg-amber-800"
-          >
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <Button size="lg" className="rounded-full px-8" render={<Link href="/register" />}>
             Register restaurant
-          </Link>
-          <Link
-            href="/login"
-            className="rounded-full border border-amber-300 bg-white px-8 py-3 text-base font-medium text-amber-950 hover:bg-amber-50"
+          </Button>
+          <Button
+            variant="outline"
+            size="lg"
+            className="rounded-full px-8"
+            render={<Link href="/login" />}
           >
             Owner login
-          </Link>
+          </Button>
         </div>
       </main>
     </div>

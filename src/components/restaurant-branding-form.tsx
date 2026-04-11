@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useMemo, useState } from "react";
 import { updateRestaurantBranding } from "@/actions/restaurant";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   initialName: string;
@@ -13,6 +14,17 @@ type Props = {
 const inputClass =
   "mt-1 w-full rounded-lg border border-stone-600 bg-stone-950 px-3 py-2 text-sm text-stone-100 placeholder:text-stone-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500/40";
 
+function isProbablyValidImageUrl(s: string): boolean {
+  const t = s.trim();
+  if (!t) return false;
+  try {
+    const u = new URL(t);
+    return u.protocol === "https:" || u.protocol === "http:";
+  } catch {
+    return false;
+  }
+}
+
 export function RestaurantBrandingForm({
   initialName,
   initialLogoUrl,
@@ -20,6 +32,18 @@ export function RestaurantBrandingForm({
   initialTiktokUrl,
 }: Props) {
   const [state, action, pending] = useActionState(updateRestaurantBranding, null);
+  const [logoUrlDraft, setLogoUrlDraft] = useState(initialLogoUrl ?? "");
+  const [logoLoadError, setLogoLoadError] = useState(false);
+
+  useEffect(() => {
+    setLogoUrlDraft(initialLogoUrl ?? "");
+  }, [initialLogoUrl]);
+
+  const showLogoPreview = useMemo(() => isProbablyValidImageUrl(logoUrlDraft), [logoUrlDraft]);
+
+  useEffect(() => {
+    setLogoLoadError(false);
+  }, [logoUrlDraft]);
 
   return (
     <form
@@ -29,7 +53,7 @@ export function RestaurantBrandingForm({
       <h2 className="text-lg font-medium text-stone-50">Branding &amp; social</h2>
       <p className="mt-1 text-sm text-stone-400">
         Restaurant name and logo appear on your public menu header. Social links use full URLs
-        (https://…).
+        (https://…). Logo preview updates as you type a valid URL.
       </p>
       {state && "ok" in state && !state.ok ? (
         <p className="mt-3 rounded-lg border border-red-900/60 bg-red-950/40 px-3 py-2 text-sm text-red-300">
@@ -55,11 +79,29 @@ export function RestaurantBrandingForm({
           <input
             name="logoUrl"
             type="url"
-            defaultValue={initialLogoUrl ?? ""}
+            value={logoUrlDraft}
+            onChange={(e) => setLogoUrlDraft(e.target.value)}
             className={inputClass}
             placeholder="https://…"
           />
         </label>
+        {showLogoPreview ? (
+          <div className="rounded-lg border border-stone-700/80 bg-stone-950/80 p-3">
+            <p className="mb-2 text-xs font-medium text-stone-500">Preview</p>
+            <div className="flex min-h-[72px] items-center justify-center rounded-md bg-stone-900/80 p-2">
+              {logoLoadError ? (
+                <p className="text-center text-sm text-stone-500">Could not load image from this URL.</p>
+              ) : (
+                <img
+                  src={logoUrlDraft.trim()}
+                  alt="Logo preview"
+                  className="max-h-24 max-w-full object-contain"
+                  onError={() => setLogoLoadError(true)}
+                />
+              )}
+            </div>
+          </div>
+        ) : null}
         <label className="block">
           <span className="text-xs font-medium text-stone-400">Instagram</span>
           <input
@@ -81,13 +123,9 @@ export function RestaurantBrandingForm({
           />
         </label>
       </div>
-      <button
-        type="submit"
-        disabled={pending}
-        className="mt-4 rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-stone-950 hover:bg-amber-400 disabled:opacity-60"
-      >
+      <Button type="submit" disabled={pending} className="mt-4">
         {pending ? "Saving…" : "Save branding"}
-      </button>
+      </Button>
     </form>
   );
 }

@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { AccountSettingsForm } from "@/components/account-settings-form";
 import { RestaurantBrandingForm } from "@/components/restaurant-branding-form";
 
 export default async function ProfilePage() {
@@ -13,6 +14,8 @@ export default async function ProfilePage() {
 
   if (!restaurant) redirect("/dashboard");
 
+  const initialEmail = session.user.email ?? "";
+
   return (
     <div className="mx-auto w-full min-w-0 max-w-xl space-y-6">
       <div>
@@ -20,9 +23,11 @@ export default async function ProfilePage() {
           Profile
         </h1>
         <p className="mt-1 text-sm text-stone-500">
-          Branding and links shown on your public menu header.
+          Account security (email and password) and branding shown on your public menu header.
         </p>
       </div>
+
+      <AccountSettingsForm initialEmail={initialEmail} />
 
       <RestaurantBrandingForm
         initialName={restaurant.name}

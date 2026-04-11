@@ -19,7 +19,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   }
 
   return (
-    <div className="dark flex min-h-full flex-1 flex-col bg-background font-sans antialiased">
+    <div className="flex min-h-full flex-1 flex-col bg-background font-sans antialiased">
       <DashboardFrame
         restaurant={{
           name: restaurant.name,
