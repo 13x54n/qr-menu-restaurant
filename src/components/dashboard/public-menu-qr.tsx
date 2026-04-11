@@ -56,7 +56,8 @@ export function PublicMenuQr({ url, slug }: Props) {
         <span className="text-stone-600"> · </span>
         <span className="text-stone-500">{url}</span>
       </p>
-      <div className="mt-3 flex flex-col items-center gap-3 sm:flex-row sm:items-start sm:gap-4">
+      {/* Always stack: the overview column is narrow (~280px); a side-by-side row squeezes the download link into one letter per line. */}
+      <div className="mt-3 flex flex-col items-center gap-3">
         <div className="flex h-[200px] w-[200px] shrink-0 items-center justify-center rounded-lg border border-stone-700 bg-stone-950 p-2">
           {error ? (
             <p className="px-2 text-center text-xs text-red-400">{error}</p>
@@ -72,17 +73,17 @@ export function PublicMenuQr({ url, slug }: Props) {
             <p className="text-xs text-stone-500">Generating…</p>
           )}
         </div>
-        <div className="flex w-full flex-col gap-2 sm:min-w-0 sm:flex-1">
+        <div className="flex w-full max-w-[240px] flex-col gap-2">
           {dataUrl ? (
             <a
               href={dataUrl}
               download={downloadName}
-              className="inline-flex w-full items-center justify-center rounded-lg border border-amber-600/70 bg-amber-500/10 px-4 py-2.5 text-center text-sm font-medium text-amber-300 hover:bg-amber-500/20 sm:w-auto sm:justify-start"
+              className="inline-flex w-full items-center justify-center whitespace-nowrap rounded-lg border border-amber-600/70 bg-amber-500/10 px-4 py-2.5 text-center text-sm font-medium text-amber-300 hover:bg-amber-500/20"
             >
               Download QR (PNG)
             </a>
           ) : null}
-          <p className="text-center text-[11px] text-stone-500 sm:text-left">
+          <p className="text-center text-[11px] text-stone-500">
             Encodes this public menu URL. Regenerates automatically if the URL changes.
           </p>
         </div>
