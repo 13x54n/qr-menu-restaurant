@@ -41,9 +41,21 @@ export function PublicMenuQr({ url, slug }: Props) {
   const downloadName = `${safeSlug}-menu-qr.png`;
 
   return (
-    <div className="mt-4 border-t border-stone-700/80 pt-4">
+    <div>
       <p className="text-xs font-medium uppercase tracking-wider text-stone-500">QR for tables</p>
       <p className="mt-1 text-xs text-stone-500">Scan to open your public menu. Download the PNG for print.</p>
+      <p className="mt-2 min-w-0 break-all text-[11px] leading-snug text-stone-400">
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-amber-400/90 underline decoration-amber-700/50 underline-offset-2 hover:text-amber-300"
+        >
+          Open menu in browser
+        </a>
+        <span className="text-stone-600"> · </span>
+        <span className="text-stone-500">{url}</span>
+      </p>
       <div className="mt-3 flex flex-col items-center gap-3 sm:flex-row sm:items-start sm:gap-4">
         <div className="flex h-[200px] w-[200px] shrink-0 items-center justify-center rounded-lg border border-stone-700 bg-stone-950 p-2">
           {error ? (
@@ -71,7 +83,7 @@ export function PublicMenuQr({ url, slug }: Props) {
             </a>
           ) : null}
           <p className="text-center text-[11px] text-stone-500 sm:text-left">
-            Encodes the same link as above. Regenerates if the URL changes.
+            Encodes this public menu URL. Regenerates automatically if the URL changes.
           </p>
         </div>
       </div>

@@ -13,9 +13,6 @@ export default async function OverviewPage() {
 
   const restaurant = await prisma.restaurant.findFirst({
     where: { userId: session.user.id },
-    include: {
-      _count: { select: { menuItems: true } },
-    },
   });
 
   if (!restaurant) redirect("/dashboard");
@@ -32,30 +29,14 @@ export default async function OverviewPage() {
         <p className="mt-1 text-sm text-stone-500">Quick snapshot of your QR menu.</p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)] lg:items-start">
         <div className="rounded-xl border border-stone-700/90 bg-stone-900/60 p-5 shadow-lg shadow-black/20">
-          <p className="text-xs font-medium uppercase tracking-wider text-stone-500">Menu items</p>
-          <p className="mt-2 text-3xl font-semibold text-amber-400">
-            {restaurant._count.menuItems}
-          </p>
-        </div>
-        <div className="rounded-xl border border-stone-700/90 bg-stone-900/60 p-5 shadow-lg shadow-black/20">
-          <p className="text-xs font-medium uppercase tracking-wider text-stone-500">Public URL</p>
-          <p className="mt-2 min-w-0 break-all text-sm text-stone-300 md:break-normal md:truncate">
-            <a
-              href={publicUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-amber-400 underline decoration-amber-600/60 underline-offset-2 hover:text-amber-300"
-            >
-              {publicUrl}
-            </a>
-          </p>
           <PublicMenuQr url={publicUrl} slug={restaurant.slug} />
         </div>
+        <div className="min-w-0">
+          <VisitorAnalyticsCards series={visitSeries} />
+        </div>
       </div>
-
-      <VisitorAnalyticsCards series={visitSeries} />
 
       <div className="rounded-xl border border-stone-700/90 bg-stone-900/40 p-5">
         <h2 className="text-sm font-medium text-stone-300">Next steps</h2>

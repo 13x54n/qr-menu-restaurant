@@ -42,21 +42,21 @@ export function PublicMenuItem({ item }: { item: PublicMenuItemData }) {
     return (
       <li className="border-b border-[var(--menu-border)] py-4 last:border-0">
         <div className={`min-w-0 ${oos ? "opacity-90" : ""}`}>
-          <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+          <div className="flex flex-row items-start justify-between gap-3">
             <h3 className="min-w-0 font-semibold text-[var(--menu-fg)]">
               {item.name}
               {oos ? <OutOfStockBadge /> : null}
             </h3>
             {hasItemPrice ? (
               <span
-                className={`shrink-0 font-medium tabular-nums text-[var(--menu-accent)] sm:text-right ${mutedPriceClass(oos)}`}
+                className={`shrink-0 text-right font-medium tabular-nums text-[var(--menu-accent)] ${mutedPriceClass(oos)}`}
               >
                 {formatPrice(item.priceCents!)}
               </span>
             ) : null}
           </div>
           {item.description ? (
-            <p className="mt-0.5 text-sm text-[var(--menu-muted)]">{item.description}</p>
+            <p className="mt-1 text-sm text-[var(--menu-muted)]">{item.description}</p>
           ) : null}
           <div className="mt-3 space-y-3">
             {groups.map((group) => (
@@ -68,12 +68,12 @@ export function PublicMenuItem({ item }: { item: PublicMenuItemData }) {
                   {group.choices.map((choice) => (
                     <li
                       key={choice.name}
-                      className="flex flex-col gap-0.5 text-sm text-[var(--menu-muted)] sm:flex-row sm:items-baseline sm:justify-between sm:gap-3"
+                      className="flex flex-row items-baseline justify-between gap-3 text-sm text-[var(--menu-muted)]"
                     >
                       <span className="min-w-0">{choice.name}</span>
                       {choice.priceCents !== undefined ? (
                         <span
-                          className={`shrink-0 font-medium tabular-nums text-[var(--menu-accent)] sm:text-right ${mutedPriceClass(oos)}`}
+                          className={`shrink-0 text-right font-medium tabular-nums text-[var(--menu-accent)] ${mutedPriceClass(oos)}`}
                         >
                           {choicePriceLabel(choice, group)}
                         </span>
@@ -99,7 +99,7 @@ export function PublicMenuItem({ item }: { item: PublicMenuItemData }) {
             {oos ? <OutOfStockBadge /> : null}
           </h3>
           {item.description ? (
-            <p className="mt-0.5 text-sm text-[var(--menu-muted)]">{item.description}</p>
+            <p className="mt-1 text-sm text-[var(--menu-muted)]">{item.description}</p>
           ) : null}
         </div>
       </li>
@@ -108,23 +108,21 @@ export function PublicMenuItem({ item }: { item: PublicMenuItemData }) {
 
   return (
     <li className="border-b border-[var(--menu-border)] py-4 last:border-0">
-      <div
-        className={`flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-3 ${oos ? "opacity-90" : ""}`}
-      >
-        <div className="min-w-0 flex-1">
-          <h3 className="font-semibold text-[var(--menu-fg)]">
+      <div className={oos ? "opacity-90" : ""}>
+        <div className="flex flex-row items-start justify-between gap-3">
+          <h3 className="min-w-0 font-semibold text-[var(--menu-fg)]">
             {item.name}
             {oos ? <OutOfStockBadge /> : null}
           </h3>
-          {item.description ? (
-            <p className="mt-0.5 text-sm text-[var(--menu-muted)]">{item.description}</p>
-          ) : null}
+          <span
+            className={`shrink-0 text-right font-medium tabular-nums text-[var(--menu-accent)] ${mutedPriceClass(oos)}`}
+          >
+            {formatPrice(price)}
+          </span>
         </div>
-        <span
-          className={`shrink-0 font-medium tabular-nums text-[var(--menu-accent)] sm:text-right ${mutedPriceClass(oos)}`}
-        >
-          {formatPrice(price)}
-        </span>
+        {item.description ? (
+          <p className="mt-1 text-sm text-[var(--menu-muted)]">{item.description}</p>
+        ) : null}
       </div>
     </li>
   );
