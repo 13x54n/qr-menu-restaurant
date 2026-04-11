@@ -11,7 +11,10 @@ export function LoginForm() {
   const [state, action, pending] = useActionState(loginAction, null);
 
   return (
-    <form action={action} className="mx-auto max-w-md space-y-4 rounded-2xl border border-amber-200/80 bg-white p-8 shadow-sm">
+    <form
+      action={action}
+      className="mx-auto w-full max-w-md space-y-4 rounded-2xl border border-amber-200/80 bg-white p-4 shadow-sm sm:p-8"
+    >
       <input type="hidden" name="callbackUrl" value={callbackUrl} />
       <h1 className="font-serif text-2xl font-semibold text-zinc-900">Sign in</h1>
       {state && "ok" in state && !state.ok ? (

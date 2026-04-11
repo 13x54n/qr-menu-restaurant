@@ -34,8 +34,8 @@ export function PublicMenuShell({ restaurant, sections }: Props) {
 
   return (
     <div className="mobile-only flex flex-col bg-[var(--menu-bg)]">
-      <div className="sticky top-0 z-10 border-b border-[var(--menu-border)] bg-[var(--menu-bg)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--menu-bg)]/80">
-        <header className="flex items-center justify-between px-5 py-3">
+      <div className="sticky top-0 z-10 border-b border-[var(--menu-border)] bg-[var(--menu-bg)]/95 pt-[env(safe-area-inset-top)] backdrop-blur supports-[backdrop-filter]:bg-[var(--menu-bg)]/80">
+        <header className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5">
           <div className="flex min-w-0 items-center gap-2">
             {restaurant.logoUrl ? (
               // eslint-disable-next-line @next/next/no-img-element -- owner-supplied arbitrary URLs
@@ -82,12 +82,12 @@ export function PublicMenuShell({ restaurant, sections }: Props) {
           </div>
         </header>
 
-        <nav className="px-4 pb-2" aria-label="Menu categories">
-          <div className="scrollbar-none flex gap-2 overflow-x-auto">
+        <nav className="px-3 pb-2 sm:px-4" aria-label="Menu categories">
+          <div className="scrollbar-none -mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
             <button
               type="button"
               onClick={() => setSelectedCategory(ALL_ID)}
-              className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--menu-accent)] ${
+              className={`shrink-0 rounded-full px-3 py-2 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--menu-accent)] sm:px-4 sm:text-sm ${
                 selectedCategory === ALL_ID
                   ? "bg-[var(--menu-accent)] text-[var(--menu-bg)]"
                   : "bg-[var(--menu-border)] text-[var(--menu-fg)] hover:bg-[var(--menu-accent)] hover:text-[var(--menu-bg)]"
@@ -100,11 +100,12 @@ export function PublicMenuShell({ restaurant, sections }: Props) {
                 key={section.id}
                 type="button"
                 onClick={() => setSelectedCategory(section.id)}
-                className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--menu-accent)] ${
+                className={`max-w-[11rem] shrink-0 truncate rounded-full px-3 py-2 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--menu-accent)] sm:max-w-[14rem] sm:px-4 sm:text-sm ${
                   selectedCategory === section.id
                     ? "bg-[var(--menu-accent)] text-[var(--menu-bg)]"
                     : "bg-[var(--menu-border)] text-[var(--menu-fg)] hover:bg-[var(--menu-accent)] hover:text-[var(--menu-bg)]"
                 }`}
+                title={section.title}
               >
                 {section.title}
               </button>
@@ -113,7 +114,7 @@ export function PublicMenuShell({ restaurant, sections }: Props) {
         </nav>
       </div>
 
-      <main className="flex-1 px-5 pb-8 pt-2">
+      <main className="flex-1 px-4 pb-[max(2rem,env(safe-area-inset-bottom))] pt-2 sm:px-5 sm:pb-8">
         {sections.length === 0 ? (
           <p className="py-12 text-center text-[var(--menu-muted)]">Menu coming soon.</p>
         ) : (

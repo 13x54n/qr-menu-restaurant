@@ -39,7 +39,9 @@ export function DashboardFrame({ restaurant, user, publicMenuUrl, children }: Pr
         <DashboardSiteHeader />
         <div className="flex flex-1 flex-col overflow-auto">
           <div className="@container/main flex flex-1 flex-col gap-2">
-            <div className="flex flex-col gap-4 px-4 py-4 md:gap-6 md:py-6 lg:px-6">{children}</div>
+            <div className="flex flex-col gap-4 px-3 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))] sm:px-4 md:gap-6 md:py-6 lg:px-6">
+              {children}
+            </div>
           </div>
         </div>
       </SidebarInset>

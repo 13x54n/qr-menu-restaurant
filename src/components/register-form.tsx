@@ -10,7 +10,10 @@ export function RegisterForm() {
   const ownerAppUrl = ownerDashboardUrlHint();
 
   return (
-    <form action={action} className="mx-auto max-w-md space-y-4 rounded-2xl border border-amber-200/80 bg-white p-8 shadow-sm">
+    <form
+      action={action}
+      className="mx-auto w-full max-w-md space-y-4 rounded-2xl border border-amber-200/80 bg-white p-4 shadow-sm sm:p-8"
+    >
       <h1 className="font-serif text-2xl font-semibold text-zinc-900">Create your restaurant</h1>
       {state && "ok" in state && !state.ok ? (
         <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>

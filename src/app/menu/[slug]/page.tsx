@@ -59,6 +59,7 @@ export default async function PublicMenuPage({ params }: Props) {
         description: row.description,
         priceCents: row.priceCents,
         optionGroups: groups,
+        outOfStock: row.outOfStock,
       };
     }),
   }));

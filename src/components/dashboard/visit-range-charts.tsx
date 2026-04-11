@@ -61,7 +61,7 @@ function RangeChart({
   tickInterval?: number;
 }) {
   return (
-    <ChartContainer config={chartConfig} className="aspect-auto h-[220px] w-full">
+    <ChartContainer config={chartConfig} className="aspect-auto h-[200px] w-full sm:h-[220px]">
       <LineChart data={data} margin={{ left: 4, right: 8, top: 4, bottom: 0 }}>
         <CartesianGrid vertical={false} stroke="oklch(0.35 0.01 80 / 0.5)" />
         <XAxis
@@ -115,7 +115,7 @@ export function VisitRangeCharts({ series }: Props) {
   const { bounds, w1, m1, y1 } = series;
 
   return (
-    <div className="rounded-xl border border-stone-700/90 bg-stone-900/60 p-3 shadow-lg shadow-black/20">
+    <div className="rounded-xl border border-stone-700/90 bg-stone-900/60 p-2 shadow-lg shadow-black/20 sm:p-3">
       <Tabs defaultValue="w1" className="w-full">
         <TabsList
           variant="default"

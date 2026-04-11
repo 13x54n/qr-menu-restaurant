@@ -5,10 +5,10 @@ export default function Home() {
   const exampleMenu = formatGuestMenuUrlExample("corner-bistro");
   return (
     <div className="flex flex-1 flex-col bg-gradient-to-b from-amber-50 via-orange-50 to-amber-100">
-      <header className="border-b border-amber-200/60 bg-white/80 px-6 py-4 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl items-center justify-between">
+      <header className="border-b border-amber-200/60 bg-white/80 px-4 py-3 backdrop-blur sm:px-6 sm:py-4">
+        <div className="mx-auto flex max-w-5xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <span className="font-serif text-lg font-semibold text-amber-950">QR Menu</span>
-          <nav className="flex gap-4 text-sm">
+          <nav className="flex flex-wrap items-center gap-3 text-sm sm:justify-end sm:gap-4">
             <Link href="/login" className="text-zinc-600 hover:text-zinc-900">
               Sign in
             </Link>
@@ -22,11 +22,11 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="mx-auto flex max-w-3xl flex-1 flex-col items-center justify-center px-6 py-24 text-center">
-        <h1 className="font-serif text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl">
+      <main className="mx-auto flex max-w-3xl flex-1 flex-col items-center justify-center px-4 py-16 text-center sm:px-6 sm:py-24">
+        <h1 className="font-serif text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl md:text-5xl">
           Your menu on its own subdomain
         </h1>
-        <p className="mt-6 text-lg leading-relaxed text-zinc-600">
+        <p className="mt-6 text-base leading-relaxed text-zinc-600 sm:text-lg">
           Register your restaurant, build your menu, and share a clean link
           {exampleMenu ? (
             <>

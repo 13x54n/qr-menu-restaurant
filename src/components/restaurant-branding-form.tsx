@@ -24,7 +24,7 @@ export function RestaurantBrandingForm({
   return (
     <form
       action={action}
-      className="rounded-2xl border border-stone-700/90 bg-stone-900/60 p-6 shadow-lg shadow-black/30 backdrop-blur-sm"
+      className="rounded-2xl border border-stone-700/90 bg-stone-900/60 p-4 shadow-lg shadow-black/30 backdrop-blur-sm sm:p-6"
     >
       <h2 className="text-lg font-medium text-stone-50">Branding &amp; social</h2>
       <p className="mt-1 text-sm text-stone-400">

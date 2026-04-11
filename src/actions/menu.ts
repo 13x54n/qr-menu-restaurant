@@ -22,9 +22,24 @@ async function getRestaurantForUser() {
 const baseFields = z.object({
   name: z.string().min(1).max(200),
   description: z.string().max(2000).optional(),
-  category: z.string().min(1).max(80),
+  category: z.string().min(1).max(120),
   price: z.string().optional(),
 });
+
+const MAX_MENU_CATEGORIES = 40;
+
+function normalizeMenuCategoryLabels(raw: string[]): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const s of raw) {
+    const t = s.trim();
+    if (!t || seen.has(t)) continue;
+    seen.add(t);
+    out.push(t);
+    if (out.length >= MAX_MENU_CATEGORIES) break;
+  }
+  return out;
+}
 
 function normalizeGroups(raw: FormDataEntryValue | null) {
   const parsed = parseOptionGroupsFromFormField(raw);
@@ -80,6 +95,7 @@ export async function createMenuItem(
   });
 
   revalidatePath("/dashboard");
+  revalidatePath("/dashboard/menu");
   revalidatePath(`/menu/${restaurant.slug}`);
   return { ok: true };
 }
@@ -131,6 +147,61 @@ export async function updateMenuItem(
   });
 
   revalidatePath("/dashboard");
+  revalidatePath("/dashboard/menu");
+  revalidatePath(`/menu/${restaurant.slug}`);
+  return { ok: true };
+}
+
+export async function toggleMenuItemOutOfStock(
+  itemId: string,
+): Promise<{ ok: true; outOfStock: boolean } | { ok: false; error: string }> {
+  const restaurant = await getRestaurantForUser();
+  if (!restaurant) return { ok: false, error: "No restaurant found" };
+
+  const item = await prisma.menuItem.findFirst({
+    where: { id: itemId, restaurantId: restaurant.id },
+    select: { id: true, outOfStock: true },
+  });
+  if (!item) return { ok: false, error: "Item not found" };
+
+  const outOfStock = !item.outOfStock;
+  await prisma.menuItem.update({
+    where: { id: itemId },
+    data: { outOfStock },
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/menu");
+  revalidatePath(`/menu/${restaurant.slug}`);
+  return { ok: true, outOfStock };
+}
+
+export async function updateRestaurantMenuCategories(
+  labels: string[],
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const restaurant = await getRestaurantForUser();
+  if (!restaurant) return { ok: false, error: "No restaurant found" };
+
+  if (!Array.isArray(labels)) return { ok: false, error: "Invalid categories" };
+
+  const normalized = normalizeMenuCategoryLabels(
+    labels.filter((x): x is string => typeof x === "string"),
+  );
+
+  const labelSchema = z.string().min(1).max(120);
+  for (const t of normalized) {
+    if (!labelSchema.safeParse(t).success) {
+      return { ok: false, error: "Each category must be 1–120 characters" };
+    }
+  }
+
+  await prisma.restaurant.update({
+    where: { id: restaurant.id },
+    data: { menuCategories: normalized },
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/menu");
   revalidatePath(`/menu/${restaurant.slug}`);
   return { ok: true };
 }
@@ -147,6 +218,7 @@ export async function deleteMenuItem(itemId: string): Promise<{ ok: true } | { o
   await prisma.menuItem.delete({ where: { id: itemId } });
 
   revalidatePath("/dashboard");
+  revalidatePath("/dashboard/menu");
   revalidatePath(`/menu/${restaurant.slug}`);
   return { ok: true };
 }

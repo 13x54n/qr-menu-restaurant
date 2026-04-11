@@ -7,6 +7,7 @@ export type PublicMenuItemData = {
   description: string | null;
   priceCents: number | null;
   optionGroups: OptionGroups | null;
+  outOfStock: boolean;
 };
 
 function choicePriceLabel(
@@ -21,17 +22,35 @@ function choicePriceLabel(
   return formatPrice(choice.priceCents);
 }
 
+function OutOfStockBadge() {
+  return (
+    <span className="ml-2 inline-block rounded border border-amber-900/70 bg-amber-950/50 px-1.5 py-0.5 align-middle text-[10px] font-semibold uppercase tracking-wide text-amber-200/95">
+      Out of stock
+    </span>
+  );
+}
+
+function mutedPriceClass(oos: boolean) {
+  return oos ? "opacity-45 line-through" : "";
+}
+
 export function PublicMenuItem({ item }: { item: PublicMenuItemData }) {
+  const oos = item.outOfStock;
   const groups = item.optionGroups;
   if (groups && groups.length > 0) {
     const hasItemPrice = item.priceCents != null;
     return (
       <li className="border-b border-[var(--menu-border)] py-4 last:border-0">
-        <div className="min-w-0">
-          <div className="flex justify-between gap-3">
-            <h3 className="font-semibold text-[var(--menu-fg)]">{item.name}</h3>
+        <div className={`min-w-0 ${oos ? "opacity-90" : ""}`}>
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+            <h3 className="min-w-0 font-semibold text-[var(--menu-fg)]">
+              {item.name}
+              {oos ? <OutOfStockBadge /> : null}
+            </h3>
             {hasItemPrice ? (
-              <span className="shrink-0 font-medium tabular-nums text-[var(--menu-accent)]">
+              <span
+                className={`shrink-0 font-medium tabular-nums text-[var(--menu-accent)] sm:text-right ${mutedPriceClass(oos)}`}
+              >
                 {formatPrice(item.priceCents!)}
               </span>
             ) : null}
@@ -49,11 +68,13 @@ export function PublicMenuItem({ item }: { item: PublicMenuItemData }) {
                   {group.choices.map((choice) => (
                     <li
                       key={choice.name}
-                      className="flex justify-between gap-3 text-sm text-[var(--menu-muted)]"
+                      className="flex flex-col gap-0.5 text-sm text-[var(--menu-muted)] sm:flex-row sm:items-baseline sm:justify-between sm:gap-3"
                     >
-                      <span>{choice.name}</span>
+                      <span className="min-w-0">{choice.name}</span>
                       {choice.priceCents !== undefined ? (
-                        <span className="shrink-0 font-medium tabular-nums text-[var(--menu-accent)]">
+                        <span
+                          className={`shrink-0 font-medium tabular-nums text-[var(--menu-accent)] sm:text-right ${mutedPriceClass(oos)}`}
+                        >
                           {choicePriceLabel(choice, group)}
                         </span>
                       ) : null}
@@ -72,8 +93,11 @@ export function PublicMenuItem({ item }: { item: PublicMenuItemData }) {
   if (price == null) {
     return (
       <li className="border-b border-[var(--menu-border)] py-4 last:border-0">
-        <div className="min-w-0">
-          <h3 className="font-semibold text-[var(--menu-fg)]">{item.name}</h3>
+        <div className={oos ? "opacity-90" : ""}>
+          <h3 className="font-semibold text-[var(--menu-fg)]">
+            {item.name}
+            {oos ? <OutOfStockBadge /> : null}
+          </h3>
           {item.description ? (
             <p className="mt-0.5 text-sm text-[var(--menu-muted)]">{item.description}</p>
           ) : null}
@@ -84,14 +108,21 @@ export function PublicMenuItem({ item }: { item: PublicMenuItemData }) {
 
   return (
     <li className="border-b border-[var(--menu-border)] py-4 last:border-0">
-      <div className="flex justify-between gap-3">
+      <div
+        className={`flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-3 ${oos ? "opacity-90" : ""}`}
+      >
         <div className="min-w-0 flex-1">
-          <h3 className="font-semibold text-[var(--menu-fg)]">{item.name}</h3>
+          <h3 className="font-semibold text-[var(--menu-fg)]">
+            {item.name}
+            {oos ? <OutOfStockBadge /> : null}
+          </h3>
           {item.description ? (
             <p className="mt-0.5 text-sm text-[var(--menu-muted)]">{item.description}</p>
           ) : null}
         </div>
-        <span className="shrink-0 font-medium tabular-nums text-[var(--menu-accent)]">
+        <span
+          className={`shrink-0 font-medium tabular-nums text-[var(--menu-accent)] sm:text-right ${mutedPriceClass(oos)}`}
+        >
           {formatPrice(price)}
         </span>
       </div>
