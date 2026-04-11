@@ -17,6 +17,8 @@ import type { MenuItem } from "@prisma/client";
 const field =
   "mt-1 w-full rounded-lg border border-stone-600 bg-stone-950 px-3 py-2 text-sm text-stone-100 placeholder:text-stone-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500/40";
 
+const descriptionField = `${field} min-h-[7.5rem] resize-y py-2.5 leading-relaxed`;
+
 /** Dish form: sentinel for “type a new category” in the category `<select>`. */
 const NEW_CATEGORY_OPTION = "__new_category__";
 /** Owner list: sentinel in “add category” `<select>` to reveal the text field. */
@@ -68,7 +70,7 @@ function SideDrawer({ open, onClose, title, children }: DrawerProps) {
         onClick={onClose}
       />
       <div
-        className={`fixed inset-y-0 right-0 z-[70] flex w-full max-w-full flex-col border-l border-stone-800 bg-[#0c0a09] shadow-2xl transition-transform duration-200 ease-out sm:max-w-md ${
+        className={`fixed inset-y-0 right-0 z-[70] flex w-full max-w-full flex-col border-l border-stone-800 bg-[#0c0a09] shadow-2xl transition-transform duration-200 ease-out sm:max-w-lg ${
           open ? "pointer-events-auto translate-x-0" : "pointer-events-none translate-x-full"
         }`}
       >
@@ -655,38 +657,51 @@ export function MenuManager({ items, categoryOptions, initialMenuCategories }: P
       )}
 
       <SideDrawer open={addOpen} onClose={() => setAddOpen(false)} title="Add menu item">
-        <form action={addAction} className="grid gap-3">
+        <form action={addAction} className="flex flex-col gap-4">
           {addState && "ok" in addState && !addState.ok ? (
             <p className="rounded-lg border border-red-900/60 bg-red-950/40 px-3 py-2 text-sm text-red-300">
               {addState.error}
             </p>
           ) : null}
-          <label className="block">
-            <span className="text-xs font-medium text-stone-400">Name</span>
-            <input name="name" required className={field} placeholder="Margherita pizza" />
-          </label>
-          <label className="block">
-            <span className="text-xs font-medium text-stone-400">Description</span>
-            <textarea name="description" rows={2} className={field} placeholder="Optional" />
-          </label>
-          <CategorySelect
-            key={`add-${categoryOptions.join("|")}`}
-            fieldId="add"
-            options={categoryOptions}
-            defaultValue={defaultAddCategory}
-          />
-          <label className="block">
-            <span className="text-xs font-medium text-stone-400">Base price (CAD)</span>
-            <input
-              name="price"
-              inputMode="decimal"
-              placeholder="12.99 or leave empty with options"
-              className={field}
+          <div className="w-full shrink-0">
+            <label className="block">
+              <span className="text-xs font-medium text-stone-400">Name</span>
+              <input name="name" required className={field} placeholder="Margherita pizza" />
+            </label>
+          </div>
+          <div className="w-full shrink-0">
+            <label className="block">
+              <span className="text-xs font-medium text-stone-400">Description</span>
+              <textarea
+                name="description"
+                rows={4}
+                className={descriptionField}
+                placeholder="Optional — ingredients, dietary notes, etc."
+              />
+            </label>
+          </div>
+          <div className="w-full shrink-0">
+            <CategorySelect
+              key={`add-${categoryOptions.join("|")}`}
+              fieldId="add"
+              options={categoryOptions}
+              defaultValue={defaultAddCategory}
             />
-          </label>
-          <p className="text-xs text-stone-500">
-            Required if there are no option groups. Optional when you add groups.
-          </p>
+          </div>
+          <div className="w-full shrink-0">
+            <label className="block">
+              <span className="text-xs font-medium text-stone-400">Base price (CAD)</span>
+              <input
+                name="price"
+                inputMode="decimal"
+                placeholder="12.99 or leave empty with options"
+                className={field}
+              />
+            </label>
+            <p className="mt-1 text-xs text-stone-500">
+              Required if there are no option groups. Optional when you add groups.
+            </p>
+          </div>
           <OptionGroupsField />
           <button
             type="submit"
@@ -742,41 +757,50 @@ function MenuItemEditForm({
   );
 
   return (
-    <form action={action} className="grid gap-3">
+    <form action={action} className="flex flex-col gap-4">
       {state && "ok" in state && !state.ok ? (
         <p className="rounded-lg border border-red-900/60 bg-red-950/40 px-3 py-2 text-sm text-red-300">
           {state.error}
         </p>
       ) : null}
-      <label className="block">
-        <span className="text-xs font-medium text-stone-400">Name</span>
-        <input name="name" required defaultValue={item.name} className={field} />
-      </label>
-      <label className="block">
-        <span className="text-xs font-medium text-stone-400">Description</span>
-        <textarea
-          name="description"
-          rows={2}
-          defaultValue={item.description ?? ""}
-          className={field}
+      <div className="w-full shrink-0">
+        <label className="block">
+          <span className="text-xs font-medium text-stone-400">Name</span>
+          <input name="name" required defaultValue={item.name} className={field} />
+        </label>
+      </div>
+      <div className="w-full shrink-0">
+        <label className="block">
+          <span className="text-xs font-medium text-stone-400">Description</span>
+          <textarea
+            name="description"
+            rows={4}
+            defaultValue={item.description ?? ""}
+            className={descriptionField}
+            placeholder="Optional — ingredients, dietary notes, etc."
+          />
+        </label>
+      </div>
+      <div className="w-full shrink-0">
+        <CategorySelect
+          key={`edit-${item.id}-${categoryOptions.join("|")}`}
+          fieldId={`edit-${item.id}`}
+          options={categoryOptions}
+          defaultValue={item.category}
         />
-      </label>
-      <CategorySelect
-        key={`edit-${item.id}-${categoryOptions.join("|")}`}
-        fieldId={`edit-${item.id}`}
-        options={categoryOptions}
-        defaultValue={item.category}
-      />
-      <label className="block">
-        <span className="text-xs font-medium text-stone-400">Base price (CAD)</span>
-        <input
-          name="price"
-          inputMode="decimal"
-          defaultValue={priceStr}
-          placeholder="Optional with option groups"
-          className={field}
-        />
-      </label>
+      </div>
+      <div className="w-full shrink-0">
+        <label className="block">
+          <span className="text-xs font-medium text-stone-400">Base price (CAD)</span>
+          <input
+            name="price"
+            inputMode="decimal"
+            defaultValue={priceStr}
+            placeholder="Optional with option groups"
+            className={field}
+          />
+        </label>
+      </div>
       <OptionGroupsField key={item.id} initialJson={item.optionGroups} />
       <div className="flex gap-2 pt-2">
         <button

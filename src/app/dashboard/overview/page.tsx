@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { VisitorAnalyticsCards } from "@/components/dashboard/visitor-analytics-cards";
+import { PublicMenuQr } from "@/components/dashboard/public-menu-qr";
 import { getVisitChartSeries } from "@/lib/analytics";
 
 export default async function OverviewPage() {
@@ -50,6 +51,7 @@ export default async function OverviewPage() {
               {publicUrl}
             </a>
           </p>
+          <PublicMenuQr url={publicUrl} slug={restaurant.slug} />
         </div>
       </div>
 
