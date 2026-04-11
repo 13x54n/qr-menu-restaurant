@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 import {
@@ -8,7 +9,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { cn } from "@/lib/utils";
 import type { VisitChartSeries } from "@/lib/analytics-shared";
 
@@ -36,20 +37,7 @@ function formatUtcDateTime(iso: string): string {
   );
 }
 
-function RangeTabTrigger({ value, label }: { value: string; label: string }) {
-  return (
-    <TabsTrigger
-      value={value}
-      className={cn(
-        "h-8 min-w-0 flex-1 px-2 text-sm font-semibold tabular-nums",
-        "data-active:bg-stone-800 data-active:text-stone-50 data-active:shadow-sm",
-        "text-stone-500 hover:text-stone-300",
-      )}
-    >
-      {label}
-    </TabsTrigger>
-  );
-}
+type RangeKey = "w1" | "m1" | "y1";
 
 function RangeChart({
   data,
@@ -111,39 +99,68 @@ function RangeChart({
   );
 }
 
+const rangeTriggerClass = cn(
+  "h-9 min-w-0 flex-1 px-2 text-sm font-semibold tabular-nums",
+  "text-muted-foreground hover:text-foreground",
+  "data-[state=on]:z-[1] data-[state=on]:border-input data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm",
+);
+
 export function VisitRangeCharts({ series }: Props) {
   const { bounds, w1, m1, y1 } = series;
+  const [range, setRange] = useState<RangeKey>("w1");
 
   return (
     <div className="rounded-xl border border-stone-700/90 bg-stone-900/60 p-2 shadow-lg shadow-black/20 sm:p-3">
-      <Tabs defaultValue="w1" className="w-full">
-        <TabsList
-          variant="default"
-          className="mb-3 h-8 w-full flex-wrap justify-stretch gap-1 rounded-lg border border-stone-700/80 bg-stone-950/50 p-[3px]"
+      <div className="mb-3">
+        <span className="sr-only" id="visit-range-label">
+          Chart time range
+        </span>
+        <ToggleGroup
+          aria-labelledby="visit-range-label"
+          multiple={false}
+          spacing={0}
+          variant="outline"
+          value={[range]}
+          onValueChange={(next) => {
+            if (next.length > 0) setRange(next[0] as RangeKey);
+          }}
+          className="flex h-9 w-full rounded-lg bg-muted/50 p-0.5 shadow-inner shadow-black/20"
         >
-          <RangeTabTrigger value="w1" label="7" />
-          <RangeTabTrigger value="m1" label="30" />
-          <RangeTabTrigger value="y1" label="365" />
-        </TabsList>
-        <TabsContent value="w1" className="mt-0">
+          <ToggleGroupItem value="w1" aria-label="Last 7 days" className={rangeTriggerClass}>
+            7
+          </ToggleGroupItem>
+          <ToggleGroupItem value="m1" aria-label="Last 30 days" className={rangeTriggerClass}>
+            30
+          </ToggleGroupItem>
+          <ToggleGroupItem value="y1" aria-label="Last 365 days" className={rangeTriggerClass}>
+            365
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+      {range === "w1" ? (
+        <>
           <p className="mb-2 text-[11px] text-stone-500">
             Daily visits · {formatUtcDateTime(bounds.w1.startUtc)} → {formatUtcDateTime(bounds.w1.endUtc)}
           </p>
           <RangeChart data={w1} />
-        </TabsContent>
-        <TabsContent value="m1" className="mt-0">
+        </>
+      ) : null}
+      {range === "m1" ? (
+        <>
           <p className="mb-2 text-[11px] text-stone-500">
             Daily visits · {formatUtcDateTime(bounds.m1.startUtc)} → {formatUtcDateTime(bounds.m1.endUtc)}
           </p>
           <RangeChart data={m1} tickAngle={-45} tickInterval={2} />
-        </TabsContent>
-        <TabsContent value="y1" className="mt-0">
+        </>
+      ) : null}
+      {range === "y1" ? (
+        <>
           <p className="mb-2 text-[11px] text-stone-500">
             Monthly visits · {formatUtcDateTime(bounds.y1.startUtc)} → {formatUtcDateTime(bounds.y1.endUtc)}
           </p>
           <RangeChart data={y1} />
-        </TabsContent>
-      </Tabs>
+        </>
+      ) : null}
     </div>
   );
 }

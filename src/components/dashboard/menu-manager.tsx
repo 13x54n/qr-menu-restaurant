@@ -339,7 +339,22 @@ export function MenuManager({ items, categoryOptions, initialMenuCategories }: P
         />
       ) : null}
 
-      <section className="rounded-xl border border-stone-700/90 bg-stone-900/40 p-5 shadow-lg shadow-black/20">
+      <details className="group rounded-xl border border-stone-700/90 bg-stone-900/40 shadow-lg shadow-black/20">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 text-sm font-semibold text-stone-200 marker:content-none [&::-webkit-details-marker]:hidden">
+          <span className="min-w-0">
+            Manage menu sections
+            <span className="mt-0.5 block text-xs font-normal text-stone-500">
+              Add or remove saved categories for item dropdowns.
+            </span>
+          </span>
+          <span
+            className="shrink-0 text-stone-500 transition-transform duration-200 group-open:rotate-180"
+            aria-hidden
+          >
+            ▼
+          </span>
+        </summary>
+        <div className="border-t border-stone-700/50 px-5 pb-5 pt-4">
         <h2 className="text-sm font-semibold text-stone-200">Menu categories</h2>
         <p className="mt-1 text-xs text-stone-500">
           Used in the dropdown when you add or edit items. In-use categories from dishes are always shown in
@@ -471,7 +486,8 @@ export function MenuManager({ items, categoryOptions, initialMenuCategories }: P
             {isPendingCategories ? "Saving…" : "Save categories"}
           </button>
         </div>
-      </section>
+        </div>
+      </details>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative max-w-md flex-1">
